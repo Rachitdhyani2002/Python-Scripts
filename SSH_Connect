@@ -1,0 +1,19 @@
+import paramiko
+
+host_ip = "45.33.32.156"
+
+user_name = "root"
+pass_word = "123456"
+
+client = paramiko.SSHClient()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+try:
+    print(f"Connecting to {host_ip}...")
+    client.connect(host_ip, username=user_name, password=pass_word)
+    print(f"Connected to {host_ip}")
+    stdin, stdout, stderr = client.exec_command('whoami')
+    print(stdout.read())
+finally:
+    client.close()
+    print("Done")
