@@ -1,0 +1,20 @@
+import  requests
+
+username = input("Enter GitHub username:")
+
+url = f"https://api.github.com/users/{username}"
+
+response = requests.get(url)
+
+data = response.json()
+
+print(f"Github Username: {data['login']}")
+print(f"Full Name: {data['name']}")
+print(f"User Location: {data['location']}")
+print(f"User Bio: {data['bio']}")
+print(f"Followers: {data['followers']}")
+print(f"Following: {data['following']}")
+
+
+
+
