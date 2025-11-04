@@ -1,0 +1,14 @@
+import requests
+from bs4 import BeautifulSoup
+
+url = input("Enter the url: ")
+
+response = requests.get(url)
+
+soup = BeautifulSoup(response.text,'lxml')
+
+all_links = soup.find_all('a')
+
+print(f"Page title: {soup.title.text}")
+for links in all_links:
+    print(links.get('href'))
