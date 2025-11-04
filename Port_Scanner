@@ -1,0 +1,26 @@
+import socket
+
+def port_scanner(ip,port):
+    print(f"[Started scanning] || IP:{ip} PORT:{port}")
+    try:
+        #Socket Object
+        #AF.INET means IPv4
+        #SOCK_STREAM means we are using TCP protocol
+        sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        #Connecting with ip and port
+        result = sock.connect_ex((ip,port))
+        #Set a timeout is used to prevent script hanging
+        socket.setdefaulttimeout(1)
+        #Result == 0  means port is open
+        if result == 0:
+            print(f"[+] Port {port} is open")
+        else:
+            print(f"[-] Port {port} is closed")
+        sock.close()
+    except:
+        print(f"[-] Coudn't connect to {ip}:{port}")
+
+
+ip_addr = input("Enter the IP address to scan: ")
+port    = int(input("Enter the port to scan"))
+port_scanner(ip_addr,port)
