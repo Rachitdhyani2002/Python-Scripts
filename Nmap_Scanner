@@ -1,0 +1,41 @@
+import nmap
+import sys
+
+try:
+    nm = nmap.PortScanner()
+except nmap.PortScannerError:
+    print("Sorry nmap not found")
+    sys.exit(1)
+
+target = input("Enter your IP")
+ports  = input("Enter your ports")
+
+print(f"Scanning {target} for ports {ports}")
+
+try:
+    nm.scan(target,ports,arguments='-sV')
+    if not nm.all_hosts():
+        print(f"[-] No hosts found for {target}")
+        sys.exit(1)
+    else:
+        print("[+] Hosts found")
+
+    for host in nm.all_hosts():
+        print("\n-----------")
+        print(f"Host IP:{host}")
+        print(f"Host Domain Name:{nm[host].hostname()}")
+        print(f"Target is: {nm[host].state()}")
+
+        for proto in nm[host].all_protocols():
+            print(f"Protocol:{proto}")
+            port_list = nm[host][proto].keys()
+            for port in sorted(port_list):
+                port_info = nm[host][proto][port]
+                state = port_info['state']
+                service = port_info['name']
+                version = port_info['version']
+                print(f"Port:{port} State:{state} Service:{service} Version:{version}")
+except:
+    print(f"[-] No hosts found for {target}")
+    sys.exit(1)
+
