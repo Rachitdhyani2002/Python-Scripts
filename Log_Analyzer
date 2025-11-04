@@ -1,0 +1,47 @@
+from readline import clear_history
+ip_counts={}
+print("[+]LOG FILE ANALYZER[+]")
+
+log_file = input("Please! enter log file name:")
+
+print("Choose your operation/filter")
+print("[1]-Find successful login attempts ")
+print("[2]-Find failed login attempts")
+print("[3]-Just print full log file")
+choice = int(input("Please! Enter your choice"))
+
+if choice == 1:
+    search_keyword = "Login attempt successful"
+    report_title   = "Successful Login Attempts Report"
+elif choice == 2:
+    search_keyword = "Login attempt failed"
+    report_title = "Failed Login Attempts Report"
+elif choice == 3:
+    with open(log_file,'r') as f:
+     print(f.read())
+     exit()
+else:
+    print("[-]ERROR[!] Invalid choice")
+    exit()
+
+
+with open(log_file, "r") as file:
+    for line in file:
+        if search_keyword in line:
+            parts = line.split(':')
+            ip_part = parts[2]
+            ip_address = ip_part.split(' ')[0]
+
+            if ip_address in ip_counts:
+                ip_counts[ip_address] += 1
+            else:
+                ip_counts[ip_address] = 1
+
+print("\n"+report_title+"----")
+if not ip_counts:
+    print("No entry found")
+else:
+    for ip,count in ip_counts.items():
+        print(f"Ip:{ip}   Attempts:{count}")
+
+
